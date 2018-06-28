@@ -8,6 +8,7 @@ BR2_LINUX_KERNEL=y
 BR2_LINUX_KERNEL_USE_CUSTOM_CONFIG=y
 BR2_LINUX_KERNEL_CUSTOM_CONFIG_FILE="../base_external/configs/linux_kernel_defconfig"
 BR2_LINUX_KERNEL_INSTALL_TARGET=y
+BR2_PACKAGE_BUSYBOX_CONFIG="../base_external/configs/busybox.config"
 BR2_PACKAGE_OPENSSH=y
 BR2_PACKAGE_SWUPDATE=y
 BR2_PACKAGE_SWUPDATE_CONFIG="../base_external/configs/swupdate.config"
