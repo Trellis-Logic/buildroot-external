@@ -5,7 +5,7 @@ SWUPDATE_IMAGES_DIR=${BINARIES_DIR}
 SWUPDATE_PARTUUID_BOOT_DEV="544c4f47"
 SWUPDATE_PARTUUID_ROOTFSA_PART="01"
 SWUPDATE_PARTUUID_ROOTFSB_PART="02"
-SWUPDATE_ROOT_FILE_COMPRESSED="false"
+SWUPDATE_ROOT_FILE_COMPRESSED="true"
 SWUPDATE_STAGING_DIR=${STAGING_DIR}/swupdate
 GRUB_EDITENV_BIN=${HOST_DIR}/bin/grub-editenv
 GRUB_ENV_PATH=${BASE_DIR}/data-partition/boot/grub/grubenv
@@ -13,12 +13,9 @@ SWUPDATE_PRODUCT_NAME="project"
 set -e
 if [ ${SWUPDATE_ROOT_FILE_COMPRESSED} = "true" ]; then
     rm -f ${SWUPDATE_ROOT_FILE}
-    SWUPDATE_ROOT_FILENAME="${SWUPDATE_ROOT_FILENAME_BASE}.gz2"
+    SWUPDATE_ROOT_FILENAME="${SWUPDATE_ROOT_FILENAME_BASE}.gz"
     SWUPDATE_ROOT_FILE=${SWUPDATE_IMAGES_DIR}/${SWUPDATE_ROOT_FILENAME}
-    tar -C ${SWUPDATE_IMAGES_DIR} -zcvf ${SWUPDATE_ROOT_FILE} ${SWUPDATE_ROOT_FILENAME_BASE}
-else
-    SWUPDATE_ROOT_FILENAME=${SWUPDATE_ROOT_FILENAME_BASE}
-    SWUPDATE_ROOT_FILE=${SWUPDATE_IMAGES_DIR}/${SWUPDATE_ROOT_FILENAME}
+    gzip -c ${SWUPDATE_IMAGES_DIR}/${SWUPDATE_ROOT_FILENAME_BASE} >  ${SWUPDATE_ROOT_FILE}
 fi
 mkdir -p ${SWUPDATE_STAGING_DIR}
 # See https://sbabic.github.io/swupdate/sw-description.html#software-collections
@@ -35,6 +32,7 @@ software =
                         filename = "${SWUPDATE_ROOT_FILENAME}";
                         device = "/dev/disk/by-partuuid/${SWUPDATE_PARTUUID_BOOT_DEV}-${SWUPDATE_PARTUUID_ROOTFSA_PART}";
                         compressed = ${SWUPDATE_ROOT_FILE_COMPRESSED};
+                        installed-directly = true
                     }
              );
              bootenv: (
@@ -50,6 +48,7 @@ software =
                         filename = "${SWUPDATE_ROOT_FILENAME}";
                         device = "/dev/disk/by-partuuid/${SWUPDATE_PARTUUID_BOOT_DEV}-${SWUPDATE_PARTUUID_ROOTFSB_PART}";
                         compressed = ${SWUPDATE_ROOT_FILE_COMPRESSED};
+                        installed-directly = true
                    }
              );
              bootenv: (
