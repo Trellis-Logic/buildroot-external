@@ -40,10 +40,6 @@ the br2-external tree for commit.
 Use ```source debug/buildroot_vars``` before attempting to run standalone buildroot scripts for debug purposes.  If there's a more elegant way to do this I haven't found it yet.
 
 # Partition UUID
+
 Pick a partition UUID which is reasonably likely to be unique for your project (especially with respect to USB or other devices which may be inserted during startup).
-Enter this partition UUID in the following places
-* base_external/configs/genimage.cfg
-* base_external/scripts/build-swupdate-swu.sh
-* base_external/rootfs-overlay/boot/grub/grub.cfg
-* base_external/rootfs-overlay/etc/fstab
-Be sure to use lowercase hex values for any /dev/disk/by-partuuid references
+Then run ./setup_part_uuid.sh <partuuid> to apply this partition UUID to all scripts which depend on it
